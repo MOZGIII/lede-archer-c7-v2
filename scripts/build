@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.."
+ROOT="$(pwd)"
+
+pushd source
+git clean -Xdff
+./scripts/feeds update -a
+./scripts/feeds install -a
+"$ROOT/scripts/mergeconfig" "$ROOT/config.d" > .config
+make defconfig
